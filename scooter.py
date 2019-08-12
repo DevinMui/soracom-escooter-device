@@ -14,7 +14,6 @@ class Device:
             self.speed = value['speed_kmh']
 
     def __init__(self, mac):
-        self.__isLocked = 1 
         self.session = None
         self.speed = 0
         self.battery = 0
@@ -55,13 +54,11 @@ class Device:
             return 0
 
     def lock(self):
-        if self.__isLocked:
+        if scooter.request(m365message.lock_status):
             return
-        self.__isLocked = 1
         self.scooter.request(m365message.turn_on_lock)
 
     def unlock(self):
-        if not self.__isLocked:
+        if not scooter.request(m365message.lock_status):
             return
-        self.__isLocked = 0
         self.scooter.request(m365message.turn_off_lock)

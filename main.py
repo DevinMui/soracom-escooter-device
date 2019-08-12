@@ -10,7 +10,7 @@ def main():
     parser.add_argument('-m', '--mac', type=str, required=True, help='Xiaomi M365 bluetooth MAC address') 
     args = parser.parse_args()
 
-    delayInSec = 1
+    delayInSec = 5
 
     device = Device(args.mac)
     device.connect()
@@ -20,21 +20,16 @@ def main():
         if not device.getGPS():
             continue
 
-        if (device.speed != prevDevice.speed or
-            device.battery != prevDevice.battery or
-            device.lat != prevDevice.lat or
-            device.lng != prevDevice.lng):
-            
-            res = API.funk(device)
-            API.harvest(device)
+        res = API.funk(device)
+        API.harvest(device)
 
-            if(res['inUse']):
-                device.unlock()
-            else:
-                device.lock()
+        if(res['inUse']):
+            device.unlock()
+        else:
+            device.lock()
 
-            prevDevice = device
-            sleep(delayInSec)
+        prevDevice = device
+        sleep(delayInSec)
 
     device.disconnect()
 
