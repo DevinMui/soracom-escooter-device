@@ -10,21 +10,30 @@ def main():
         
     }
     device = Device(config)
+    device.connect()
 
-    prevData = device.data
+    prevDevice = device
     while True:
-        device.getData()
-        if(device.data != prevDev.data):
+        if not device.getGPS():
+            continue
+
+        if (device.speed != prevDevice.speed or
+            device.battery != prevDevice.battery or
+            device.lat != prevDevice.lat or
+            device.lng != prevDevice.lng):
+            
             res = API.funk(device)
             API.harvest(device)
 
             if(res['inUse']):
-                scooter.turnOn()
+                device.unlock()
             else:
-                scooter.turnOff()
+                device.lock()
 
-            prevData = device.data
+            prevDevice = device
             sleep(delayInSec)
+
+    device.disconnect()
 
 if __name__ == '__main__':
     main()
