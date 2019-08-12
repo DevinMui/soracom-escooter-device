@@ -11,14 +11,16 @@ class Device:
             self.battery = value['battery_percent']
 
         if message.attribute == m365message.Attribute.SPEED:
-            self.speed = value['speed']
+            self.speed = value['speed_kmh']
 
-    def __init__(self, mac, config):
+    def __init__(self, mac):
+        self.__isLocked = 1 
         self.session = None
         self.speed = 0
         self.battery = 0
         self.lat = 0
         self.lng = 0
+        self.mac = mac
 
         self.scooter = m365py.M365(mac, self.handleMessage)
         self.scooter.set_connected_callback(self.connected)
@@ -26,6 +28,7 @@ class Device:
 
     def connect(self):
         self.scooter.connect()
+        self.lock()
 
         self.session = gps.gps("localhost", "2947")
         self.session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
@@ -52,7 +55,13 @@ class Device:
             return 0
 
     def lock(self):
+        if self.__isLocked:
+            return
+        self.__isLocked = 1
         self.scooter.request(m365message.turn_on_lock)
 
     def unlock(self):
+        if not self.__isLocked:
+            return
+        self.__isLocked = 0
         self.scooter.request(m365message.turn_off_lock)

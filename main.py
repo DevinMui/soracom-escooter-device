@@ -3,13 +3,16 @@
 from scooter import Device
 from api import API
 from time import sleep
+from argparse import ArgumentParser
 
 def main():
+    parser = ArgumentParser(description='Control Xiaomi M365 and talk to SORACOM and AWS Lambda')
+    parser.add_argument('-m', '--mac', type=str, required=True, help='Xiaomi M365 bluetooth MAC address') 
+    args = parser.parse_args()
+
     delayInSec = 1
-    config = {
-        
-    }
-    device = Device(config)
+
+    device = Device(args.mac)
     device.connect()
 
     prevDevice = device

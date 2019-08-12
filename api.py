@@ -14,6 +14,7 @@ class API:
         url = 'https://funk.soracom.io:8888'
         data = {
             'event': {
+                'mac': device.mac,
                 'coords': {
                     'lng': device.lng,
                     'lat': device.lat
@@ -34,8 +35,9 @@ class API:
     def harvest():
         url = 'https://harvest.soracom.io'
         data = {
+            'mac': device.mac,
             'lng': device.lng,
-            'lat': device.lat
+            'lat': device.lat,
             'battery': device.battery,
             'speed': device.speed
         }
