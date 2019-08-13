@@ -21,26 +21,11 @@ device = Device(args.mac)
 device.connect()
 
 def updateLoop():
-    prevDevice = device
     while True:
-        if not device.getGPS():
-            continue
+        res = API.funk(device)
+        API.harvest(device)
 
-        if (device.speed != prevDevice.speed or
-            device.battery != prevDevice.battery or
-            device.lat != prevDevice.lat or
-            device.lng != prevDevice.lng):
-
-            res = API.funk(device)
-            API.harvest(device)
-
-            if(res['inUse']):
-                device.unlock()
-            else:
-                device.lock()
-
-            prevDevice = device
-            sleep(delayInSec)
+        sleep(delayInSec)
 
     device.disconnect()
 
