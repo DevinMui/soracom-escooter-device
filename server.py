@@ -25,6 +25,11 @@ def updateLoop():
         res = API.funk(device)
         API.harvest(device)
 
+        if(res['inUse']):
+            device.unlock()
+        else:
+            device.lock()
+
         sleep(delayInSec)
 
     device.disconnect()
