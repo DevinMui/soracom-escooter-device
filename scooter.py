@@ -4,9 +4,11 @@ from m365py import m365py
 from m365py import m365message
 
 import gps
+from time import sleep
 
 class Device:
     def handleMessage(self, peripheral, message, value):
+        print(value)
         if message.attribute == m365message.Attribute.BATTERY_PERCENT:
             self.battery = value['battery_percent']
 
@@ -20,17 +22,15 @@ class Device:
         self.lat = 0
         self.lng = 0
         self.mac = mac
+        self.session = None
 
         self.scooter = m365py.M365(mac, self.handleMessage)
-        self.scooter.set_connected_callback(self.connected)
-        self.scooter.set_disconnected_callback(self.disconnected)
 
     def connect(self):
         self.scooter.connect()
         self.lock()
 
-        self.session = gps.gps("localhost", "2947")
-        self.session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
+        self.session = gps.gps(mode=gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
 
     def disconnect(self):
         self.scooter.disconnect()
@@ -39,26 +39,36 @@ class Device:
 
     def connected(self):
         print('Xiaomi M365 connected')
-    
+
     def disconnected(self):
         print('Xiaomi M365 disconnected')
-    
+
     def getGPS(self):
         try:
+            self.battery = self.scooter.request(m365message.battery_percentage)
+            self.speed = self.scooter.request(m365message.speed) or 0.0
+            print(self.battery)
+            print(self.speed)
             data = self.session.next()
-            lng = data.lon
-            lat = data.lat
-            return 1
+            if(data['class'] == 'TPV'):
+                print(data)
+                self.lat = getattr(data,'lat',0.0)
+                self.lng = getattr(data,'lon',0.0)
+                return 1
+            else:
+                self.getGPS()
+                sleep(1)
+
         except Exception as e:
             print(e)
             return 0
 
     def lock(self):
-        if scooter.request(m365message.lock_status):
+        if self.scooter.request(m365message.lock_status):
             return
         self.scooter.request(m365message.turn_on_lock)
 
     def unlock(self):
-        if not scooter.request(m365message.lock_status):
+        if not self.scooter.request(m365message.lock_status):
             return
         self.scooter.request(m365message.turn_off_lock)

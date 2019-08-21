@@ -3,7 +3,7 @@
 import requests
 
 class API:
-    
+
     '''
         This method sends our device data to SORACOM Funk
         which forwards our data to AWS Lambda in a secure
@@ -24,7 +24,7 @@ class API:
             }
         }
         r = requests.post(url, json=data)
-        return r.json()
+        return r
 
     '''
         This method sends our device data to SORACOM Harvest
@@ -32,8 +32,8 @@ class API:
         to display data in a graphical format.
     '''
     @staticmethod
-    def harvest():
-        url = 'https://harvest.soracom.io'
+    def harvest(device):
+        url = 'http://harvest.soracom.io'
         data = {
             'mac': device.mac,
             'lng': device.lng,
@@ -41,5 +41,5 @@ class API:
             'battery': device.battery,
             'speed': device.speed
         }
-        r = requests.post(url, json=data)
-        return r.json()
+        r = requests.post(url, json=data, timeout=15)
+        return r

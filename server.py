@@ -10,6 +10,7 @@ from multiprocessing import Process
 app = Flask(__name__)
 
 app.debug = True
+app.use_reloader = False # reloader won't work correctly bc of multiprocessing
 
 parser = ArgumentParser(description='Control Xiaomi M365 and talk to SORACOM and AWS Lambda')
 parser.add_argument('-m', '--mac', type=str, required=True, help='Xiaomi M365 bluetooth MAC address') 
@@ -34,13 +35,22 @@ def updateLoop():
 
     device.disconnect()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'GET':
+        return viewData()
+    elif request.method == 'POST':
+        return updateInUse()
+
 def updateInUse():
     if request.json.inUse:
         device.unlock()    
     else:
         device.lock()
     return jsonify({ 'message': 'device updated' })
+
+def viewData():
+    return render_template('data.html', device=device)
 
 if __name__ == '__main__':
     p = Process(target=updateLoop)
