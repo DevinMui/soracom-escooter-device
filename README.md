@@ -9,3 +9,5 @@ http://medium.com/@matthewleak/aws-lambda-functions-with-a-static-ip-89a3ada0b47
 Find Xiaomi M365 MAC: `sudo python -m m365py`
 
 Run cmd: `python server.py -m [Xiaomi M365 MAC address]`
+
+Turn on GPSD: `sudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock`

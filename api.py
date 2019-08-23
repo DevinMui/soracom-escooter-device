@@ -11,17 +11,15 @@ class API:
     '''
     @staticmethod
     def funk(device):
-        url = 'https://funk.soracom.io:8888'
+        url = 'http://funk.soracom.io'
         data = {
-            'event': {
-                'mac': device.mac,
-                'coords': {
-                    'lng': device.lng,
-                    'lat': device.lat
-                },
-                'battery': device.battery,
-                'speed': device.speed
-            }
+            'mac': device.mac,
+            'coords': {
+                'lng': device.lng,
+                'lat': device.lat
+            },
+            'battery': device.battery,
+            'speed': device.speed
         }
         r = requests.post(url, json=data)
         return r
