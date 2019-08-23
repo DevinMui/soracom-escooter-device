@@ -48,14 +48,15 @@ class Device:
             self.battery = self.scooter.request(m365message.battery_percentage)
             self.speed = self.scooter.request(m365message.speed) or 0.0
             data = self.session.next()
-            if(data['class'] == 'TPV'):
-                self.lat = getattr(data,'lat',0.0)
-                self.lng = getattr(data,'lon',0.0)
-                return 1
-            else:
-                self.getGPS()
+            noRetries = 0
+            while(noRetries<3):
+                data = self.session.next()
+                if(data['class'] == 'TPV'):
+                    self.lat = getattr(data,'lat',self.lat)
+                    self.lng = getattr(data,'lon',self.lng)
+                    return 1
+                noRetries+=1
                 sleep(1)
-
         except Exception as e:
             print(e)
             return 0
