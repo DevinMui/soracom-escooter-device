@@ -61,11 +61,7 @@ class Device:
             return 0
 
     def lock(self):
-        if self.scooter.request(m365message.lock_status):
-            return
         self.scooter.request(m365message.turn_on_lock)
 
     def unlock(self):
-        if not self.scooter.request(m365message.lock_status):
-            return
         self.scooter.request(m365message.turn_off_lock)
