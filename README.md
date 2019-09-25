@@ -1,5 +1,5 @@
 # soracom-escooter-app
-This repository accompanies the tutorial for building an escooter app using SORACOM services (Link coming soon). You'll need to have also completed the steps in the first article (Link coming soon) to connect the GPS module and SORACOM Air SIM.     
+This repository accompanies the tutorial for building an escooter app using [Soracom's services](https://hackernoon.com/how-we-built-a-cellular-connected-iot-electric-scooter-with-soracom-and-raspberry-pi-in-under-an-hou-mbhc25cx). You'll need to have also completed the steps in the [first article](https://hackernoon.com/how-we-built-a-cellular-connected-iot-electric-scooter-with-soracom-and-raspberry-pi-in-under-an-hou-mbhc25cx) to connect the GPS module and SORACOM Air SIM.     
 Clone this repository and run the various `.py` files on the Raspberry Pi to see it interact with the electric scooter and your [AWS Lambda functions](https://github.com/DevinMui/soracom-escooter-server). 
 
 ## Setup    
@@ -41,11 +41,11 @@ You'll need to complete this step once you've cloned the repository. This step m
   #### `api.py`
   This file helps package eScooter data before it is sent to SORACOM Harvest or Funk. Though you won't be interacting with this file directly, it is used in both `harvest.py` and `funk.py` to create HTTP requests.
   #### `funk.py`
-  This file communicates with SORACOM Funk, which allows data to be sent securely to AWS (or another clou provider) without much setup. You'll set up the endpoint for Funk and run this file in the third part of the series.
+  This file communicates with SORACOM Funk, which allows data to be sent securely to AWS (or another clou provider) without much setup. You'll set up the endpoint for Funk and run this file in the fourth part of the series.
   #### `harvest.py`
   This file communicates with SORACOM Harvest, which collects data sent through the SIM card. It packages eScooter data neatly in a JSON object in an HTTP request before sending it to the Harvest endpoint. You'll set up Harvest (and its visualization with Lagoon) in the second part of the series.
   #### `napter.py`
-  This file enables Napter on the Raspberry Pi. It exposes a Flask server, which can be accessed remotely by a specific range of IP addresses. It will let you lock and unlock the eScooter remotely. The pages created by the server will let you see eScooter data and commands through a web browser. You'll set up Napter and run this file in the fourth part of the series.
+  This file enables Napter on the Raspberry Pi. It exposes a Flask server, which can be accessed remotely by a specific range of IP addresses. It will let you lock and unlock the eScooter remotely. The pages created by the server will let you see eScooter data and commands through a web browser. You'll set up Napter and run this file in the third part of the series.
   #### `requirements.txt`
   This file is created by Python's package manager `pip`. It organizes required packages and their versions into a single file so that installing them during setup is easy. Simply ask `pip` to install it with `pip install -r requirements.txt`. 
   #### `scooter.py`
