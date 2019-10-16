@@ -10,10 +10,10 @@ device.connect()
 while True:
     device.getGPS()
     r =  API.funk(device)
-    if r.json()['inUse']:
+    if r.json()['body']['inUse']:
         device.unlock()
     else:
-        r.json()['lock']
+        device.lock()
 
     time.sleep(5)
 
