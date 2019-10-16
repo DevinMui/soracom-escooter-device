@@ -4,7 +4,8 @@ from api import API
 from scooter import Device
 
 delay = 5
-device = Device("f0:81:4f:ae:de:d3")
+mac = "f0:81:4f:ae:de:d3"
+device = Device(mac)
 device.connect()
 
 while True:
